@@ -8,12 +8,12 @@ import * as simpleGit from 'simple-git/promise';
 
 const defaultOptions = {
   message: '',
-  paths: []
+  paths: [] as string[]
 };
 
-function factory ( options? ) {
+function factory ( customOptions?: Partial<typeof defaultOptions> ) {
 
-  options = Object.assign ( {}, defaultOptions, options );
+  const options = Object.assign ( {}, defaultOptions, customOptions );
 
   return async function autocommit ( config, repoPath, ctx, task ) {
 
@@ -30,7 +30,7 @@ function factory ( options? ) {
 
     if ( !filesPaths.length ) return task.skip ( 'No files to autocommit' );
 
-    task.output = `Committing ${filesPaths.length} files...`;
+    task.output = `Committing ${filesPaths.length} ${filesPaths.length === 1 ? 'file' : 'files'}...`;
 
     if ( config.dry ) return task.skip ();
 
